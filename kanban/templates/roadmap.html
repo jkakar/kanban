@@ -1,0 +1,68 @@
+<html>
+  <head>
+    <META http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>{{ roadmap.project }} roadmap</title>
+    <link rel="stylesheet" type="text/css" href="media/decogrids-12.css" />
+    <link rel="stylesheet" type="text/css" href="media/kanban.css" />
+  </head>
+
+  <body>
+    <div id="container">
+      <div id="heading" class="row">
+        <div class="position-0 width-12 cell">
+          <h1><a href="https://launchpad.net/{{ roadmap.project }}">{{ roadmap.project }}</a> roadmap</h1>
+        </div>
+      </div>
+
+      <div id="header" class="row">
+      {% for heading in headings %}
+        <div class="{{ heading.css_class }}">
+          <h2>{{ heading.name }} <span class="time-span">{{ heading.time_span }}</span><span class="story-count">{{ heading.count }} stories</span></h2>
+        </div>
+      {% endfor %}
+      </div>
+
+    {% for track in tracks %}
+      <div class="tiles row story">
+        <div class="position-0 width-12 cell">{{ track.name }}</div>
+      </div>
+
+      <div class="tiles row">
+      {% for time_period in track.time_periods %}
+        <div class="{{ time_period.css_class }}">
+        {% for story in time_period.stories %}
+           <div class="tile roadmap-tile">
+             <span class="status {{ story.status|status_css_class }}">{{ story.status }}</span>
+           {% if story.link %}
+             <a href="{{ story.link }}">{{ story.name }}</a>
+           {% else %}
+             {{ story.name }}
+           {% endif %}
+             <br/>
+             <br/>
+             <div>{{ story.description }}</div>
+           {% if story.assignees %}
+             <br/>
+             <span class="assignees">{{ story.assignees|join(", ") }}</span>
+             <br clear="both"/>
+           {% endif %}
+           </div>
+        {% endfor %}
+        </div>
+      {% endfor %}
+      </div>
+    {% endfor %}
+
+      <!-- XXX This is a hack.  It'd be better to add bottom-rounded
+               borders to the last .tile element. -->
+      <div id="prefooter" class="row">
+        <div class="position-0 width-12 cell">&nbsp;</div>
+      </div>
+
+      <div id="footer" class="row">
+        <div class="position-0 width-12 cell">Generated on {{ now }}</div>
+      </div>
+
+    </div>
+  </body>
+</html>

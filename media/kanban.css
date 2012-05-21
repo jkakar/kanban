@@ -1,0 +1,198 @@
+body {
+    background: url(background.png) repeat;
+    color: #222222;
+    font-family: Ubuntu, "Bitstream Vera Sans", "DejaVu Sans", Tahoma, sans-serif;
+    font-size: 12px;
+}
+
+a {
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+a:visited {
+    color: blue;
+}
+
+h1 {
+    font-size: 20px;
+    font-weight: normal;
+    padding: 0;
+    margin: 0;
+}
+
+h1 a, h1 a:visited {
+    color: #eeeeee;
+}
+
+h2 {
+    font-size: 14px;
+    font-weight: normal;
+    padding: 0;
+    margin: 0;
+}
+
+h1 .bug-count, h2 .bug-count, h2 .time-span {
+    font-weight: normal;
+    padding-left: 6px;
+}
+
+h2 .story-count  {
+    font-weight: normal;
+    padding-left: 12px;
+}
+
+h1 .bug-count {
+    color: #aaaaaa;
+    font-size: 13px;
+}
+
+h2 .bug-count, h2 .time-span, h2 .story-count {
+    color: #777777;
+    font-size: 11px;
+}
+
+#container {
+    min-width: 978px;
+    max-width: 1280px;
+    margin: 0 auto;
+}
+
+#heading {
+    color: #eeeeee;
+    padding: 6px 0 12px 6px;
+}
+
+#header, .tiles {
+    padding: 6px 0 6px 6px;
+    background: white;
+}
+
+#legend, #prefooter {
+    color: #444444;
+    padding: 6px 0 3px 6px;
+    background: #dddddd;
+    line-height: 16px;
+}
+
+.legend-description {
+    padding: 0 6px;
+}
+
+#header {
+    -moz-border-radius-topleft: 6px;
+    -moz-border-radius-topright: 6px;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+}
+
+#footer {
+    color: white;
+    padding-left: 6px;
+    padding-bottom: 12px;
+}
+
+.story, .no-story {
+    color: black;
+    font-weight: bolder;
+    border-top: 1px dotted #dddddd;
+    padding-top: 12px;
+}
+
+.no-story {
+    padding-top: 0;
+}
+
+#prefooter {
+    line-height: 0;
+    -moz-border-radius-bottomleft: 6px;
+    -moz-border-radius-bottomright: 6px;
+    border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 6px;
+    margin-bottom: 12px;
+}
+
+.tile {
+    color: #222222;
+    padding: 6px;
+    margin-bottom: 12px;
+    -moz-border-radius: 6px;
+    border-radius: 6px;
+    -webkit-box-shadow: #cccccc 0px 1px 1px;
+    -moz-box-shadow: #cccccc 0px 1px 1px;
+    box-shadow: #cccccc 0px 1px 1px;
+}
+
+.roadmap-tile {
+    border-top-right-radius: 6px;
+}
+
+.warning {
+    float: right;
+    padding: 3px 0;
+}
+
+.project {
+    color: #666666;
+    font-size: 10px;
+    padding: 3px 0 6px 0;
+}
+
+.tile, .project {
+    background: #f1f1f1;
+}
+
+.tile .assignee, .tile .status, .tile .assignees {
+    float: right;
+}
+
+.tile .merge-proposal a {
+    max-width: 100%;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    -o-text-overflow: ellipsis; /* Opera-specific */
+    -moz-binding: url(binding.xml#ellipsis); /* See: http://mattsnider.com/css/css-string-truncation-with-ellipsis/ */
+}
+
+.merge-proposal {
+    padding-top: 6px;
+}
+
+.critical-importance {
+    color: red;
+}
+
+.high-importance {
+    color: #ff6600;
+}
+
+.medium-importance {
+    color: green;
+}
+
+.undecided-importance {
+    color: #666666;
+}
+
+.undecided-status {
+    color: #666666;
+}
+
+.queued-status {
+    color: #666666;
+}
+
+.active-status {
+   color: #ff6600;
+}
+
+.dropped-status {
+   color: red;
+}
+
+.done-status {
+   color: green;
+}

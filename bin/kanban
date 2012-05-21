@@ -1,0 +1,14 @@
+#!/usr/bin/python
+
+"""Use kanban interactively from a text prompt."""
+
+import os
+import sys
+
+if os.path.isdir("kanban"):
+    sys.path.insert(0, "./")
+
+from kanban.entry_point import main
+
+
+main(sys.argv)

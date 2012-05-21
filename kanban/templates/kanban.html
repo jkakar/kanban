@@ -1,0 +1,323 @@
+<html>
+  <head>
+    <META http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>{{ kanban_board.project_name }} {{ kanban_board.name }}</title>
+  {% if kanban_board.include_needs_testing %}
+    <link rel="stylesheet" type="text/css" href="media/decogrids-12.css" />
+  {% else %}
+    <link rel="stylesheet" type="text/css" href="media/decogrids-10.css" />
+  {% endif %}
+    <link rel="stylesheet" type="text/css" href="media/kanban.css" />
+  </head>
+
+  <body>
+    <div id="container">
+      <div id="heading" class="row">
+      {% if kanban_board.include_needs_testing %}
+        <div class="position-0 width-12 cell">
+      {% else %}
+        <div class="position-0 width-10 cell">
+      {% endif %}
+        {% if is_milestone %}
+          <h1><a href="https://launchpad.net/{{ kanban_board.project_name }}">{{ kanban_board.project_name }}</a> <a href="https://launchpad.net/{{ kanban_board.project_name }}/+milestone/{{ kanban_board.name}}">{{ kanban_board.name }}</a> <span class="bug-count">{{ kanban_board.bugs|length }} bugs</span></h1>
+        {% else %}
+          <h1><a href="https://launchpad.net/~{{ kanban_board.name }}">{{ kanban_board.name }}</a> <span class="bug-count">{{ kanban_board.bugs|length }} bugs</span></h1>
+        {% endif %}
+        </div>
+      </div>
+
+      <div id="header" class="row">
+        <div class="position-0 width-2 cell"><h2>Queued <span class="bug-count">{{ kanban_board.queued|length }} bugs</span></h2></div>
+        <div class="position-2 width-2 cell"><h2>In progress <span class="bug-count">{{ kanban_board.in_progress|length }} bugs</span></h2></div>
+        <div class="position-4 width-2 cell"><h2>Needs review <span class="bug-count">{{ kanban_board.needs_review|length }} bugs</span></h2></div>
+      {% if kanban_board.include_needs_testing %}
+        <div class="position-6 width-2 cell"><h2>Needs testing <span class="bug-count">{{ kanban_board.needs_testing|length }} bugs</span></h2></div>
+        <div class="position-8 width-2 cell"><h2>Needs release <span class="bug-count">{{ kanban_board.needs_release|length }} bugs</span></h2></div>
+        <div class="position-10 width-2 cell"><h2>Released <span class="bug-count">{{ kanban_board.released|length }} bugs</span></h2></div>
+      {% else %}
+        <div class="position-6 width-2 cell"><h2>Needs release <span class="bug-count">{{ kanban_board.needs_release|length }} bugs</span></h2></div>
+        <div class="position-8 width-2 cell"><h2>Released <span class="bug-count">{{ kanban_board.released|length }} bugs</span></h2></div>
+      {% endif %}
+      </div>
+
+    {% if kanban_board.include_needs_testing %}
+      {% set board_width_class = 'width-12' %}
+    {% else %}
+      {% set board_width_class = 'width-10' %}
+    {% endif %}
+
+    {% for story in kanban_board.stories %}
+      {% if kanban_board.stories|length > 1 %}
+	    {% if story.name %}
+        <div class="tiles row story">
+          <div class="position-0 {{ board_width_class }} cell">{{ story.name }}</div>
+        </div>
+	    {% else %}
+        <div class="tiles row story">
+	      <div class="position-0 {{ board_width_class }} cell">uncategorized</div>
+        </div>
+	    {% endif %}
+        {% else %}
+        <div class="tiles row no-story"></div>
+        {% endif %}
+
+      <div class="tiles row">
+        <div class="position-0 width-2 cell">
+
+        {% for bug in story.queued %}
+          <div class="tile">
+          {% if bug.assignee %}
+            <span class="assignee">{{ bug.assignee }}</span>
+          {% endif %}
+            <a href="https://bugs.launchpad.net/bugs/{{ bug.id }}">#{{ bug.id }}</a> <span class="{{ bug.importance|importance_css_class }}">{{ bug.importance }}</span>
+            <br/>
+            <div class="project">{{ bug.project }}</div>
+            <div>{{ bug.title }}</div>
+          {% if bug.branch %}
+            <div class="merge-proposal"><a href="{{ bug|branch_url }}">{{ bug.branch|branch_name }}</a></div>
+          {% endif %}
+          </div>
+        {% endfor %}
+
+        </div>
+
+        <div class="position-2 width-2 cell">
+
+        {% for bug in story.in_progress %}
+          <div class="tile">
+          {% if bug.assignee %}
+            <span class="assignee">{{ bug.assignee }}</span>
+          {% endif %}
+            <a href="https://bugs.launchpad.net/bugs/{{ bug.id }}">#{{ bug.id }}</a> <span class="{{ bug.importance|importance_css_class }}">{{ bug.importance }}</span>
+            <br/>
+            <div>
+            {% if bug|danger %}
+              <img class="warning" src="media/danger.png"
+                   title="In progress for more than 7 days" />
+            {% elif bug|warn %}
+              <img class="warning" src="media/warning.png"
+                   title="In progress for more than 3 days" />
+            {% endif %}
+              <div class="project">{{ bug.project }}</div>
+            </div>
+            <div>
+              {{ bug.title }}
+            </div>
+          {% if bug.branch %}
+            <div class="merge-proposal"><a href="{{ bug|branch_url }}">{{ bug.branch|branch_name }}</a></div>
+          {% endif %}
+          </div>
+        {% endfor %}
+
+        </div>
+
+        <div class="position-4 width-2 cell">
+
+        {% for bug in story.needs_review %}
+          <div class="tile">
+          {% if bug.assignee %}
+            <span class="assignee">{{ bug.assignee }}</span>
+          {% endif %}
+            <a href="https://bugs.launchpad.net/bugs/{{ bug.id }}">#{{ bug.id }}</a> <span class="{{ bug.importance|importance_css_class }}">{{ bug.importance }}</span>
+            <br/>
+            <div>
+            {% if bug|danger %}
+              <img class="warning" src="media/danger.png"
+                   title="In review queue for more than 3 days" />
+            {% elif bug|warn %}
+              <img class="warning" src="media/warning.png"
+                   title="In review queue for more than 1 day" />
+            {% endif %}
+              <div class="project">{{ bug.project }}</div>
+            </div>
+            <div>
+              {{ bug.title }}
+            </div>
+          {% if bug.branch %}
+            <div class="merge-proposal"><a href="{{ bug|branch_url }}">{{ bug.branch|branch_name }}</a></div>
+          {% endif %}
+          </div>
+        {% endfor %}
+
+        </div>
+
+      {% if kanban_board.include_needs_testing %}
+        <div class="position-6 width-2 cell">
+
+        {% for bug in story.needs_testing %}
+          <div class="tile">
+          {% if bug.assignee %}
+            <span class="assignee">{{ bug.assignee }}</span>
+          {% endif %}
+            <a href="https://bugs.launchpad.net/bugs/{{ bug.id }}">#{{ bug.id }}</a> <span class="{{ bug.importance|importance_css_class }}">{{ bug.importance }}</span>
+            <br/>
+            <div class="project">{{ bug.project }}</div>
+            <div>{{ bug.title }}</div>
+          {% if bug.branch %}
+            <div class="merge-proposal"><a href="{{ bug|branch_url }}">{{ bug.branch|branch_name }}</a></div>
+          {% endif %}
+          </div>
+        {% endfor %}
+
+        </div>
+
+        <div class="position-8 width-2 cell">
+
+        {% for bug in story.needs_release %}
+          <div class="tile">
+          {% if bug.assignee %}
+            <span class="assignee">{{ bug.assignee }}</span>
+          {% endif %}
+            <a href="https://bugs.launchpad.net/bugs/{{ bug.id }}">#{{ bug.id }}</a> <span class="{{ bug.importance|importance_css_class }}">{{ bug.importance }}</span>
+            <br/>
+            <div class="project">{{ bug.project }}</div>
+            <div>{{ bug.title }}</div>
+          {% if bug.branch %}
+            <div class="merge-proposal"><a href="{{ bug|branch_url }}">{{ bug.branch|branch_name }}</a></div>
+          {% endif %}
+          </div>
+        {% endfor %}
+
+        </div>
+
+        <div class="position-10 width-2 cell">
+
+        {% for bug in story.released %}
+          <div class="tile">
+          {% if bug.assignee %}
+            <span class="assignee">{{ bug.assignee }}</span>
+          {% endif %}
+            <a href="https://bugs.launchpad.net/bugs/{{ bug.id }}">#{{ bug.id }}</a> <span class="{{ bug.importance|importance_css_class }}">{{ bug.importance }}</span>
+            <br/>
+            <div class="project">{{ bug.project }}</div>
+            <div>{{ bug.title }}</div>
+          {% if bug.branch %}
+            <div class="merge-proposal"><a href="{{ bug|branch_url }}">{{ bug.branch|branch_name }}</a></div>
+          {% endif %}
+          </div>
+        {% endfor %}
+
+        </div>
+      {% else %}
+        <div class="position-6 width-2 cell">
+
+        {% for bug in story.needs_release %}
+          <div class="tile">
+          {% if bug.assignee %}
+            <span class="assignee">{{ bug.assignee }}</span>
+          {% endif %}
+            <a href="https://bugs.launchpad.net/bugs/{{ bug.id }}">#{{ bug.id }}</a> <span class="{{ bug.importance|importance_css_class }}">{{ bug.importance }}</span>
+            <br/>
+            <div class="project">{{ bug.project }}</div>
+            <div>{{ bug.title }}</div>
+          {% if bug.branch %}
+            <div class="merge-proposal"><a href="{{ bug|branch_url }}">{{ bug.branch|branch_name }}</a></div>
+          {% endif %}
+          </div>
+        {% endfor %}
+
+        </div>
+
+        <div class="position-8 width-2 cell">
+
+        {% for bug in story.released %}
+          <div class="tile">
+          {% if bug.assignee %}
+            <span class="assignee">{{ bug.assignee }}</span>
+          {% endif %}
+            <a href="https://bugs.launchpad.net/bugs/{{ bug.id }}">#{{ bug.id }}</a> <span class="{{ bug.importance|importance_css_class }}">{{ bug.importance }}</span>
+            <br/>
+            <div class="project">{{ bug.project }}</div>
+            <div>{{ bug.title }}</div>
+          {% if bug.branch %}
+            <div class="merge-proposal"><a href="{{ bug|branch_url }}">{{ bug.branch|branch_name }}</a></div>
+          {% endif %}
+          </div>
+        {% endfor %}
+
+        </div>
+      {% endif %}
+      </div>
+    {% endfor %}
+
+      <div id="legend" class="row">
+        <div class="position-0 width-2 cell">
+          <div class="legend-description">
+            <strong>Queued</strong> bugs are not <em>In progress</em>,
+            <em>Fix Committed</em> or <em>Fix Released</em>.
+          </div>
+        </div>
+
+        <div class="position-2 width-2 cell">
+          <div class="legend-description">
+            <strong>In progress</strong> bugs are <em>In Progress</em>.
+          </div>
+        </div>
+
+        <div class="position-4 width-2 cell">
+          <div class="legend-description">
+            <strong>Needs review</strong> bugs have a merge proposal
+            that <em>Needs review</em>.
+          </div>
+        </div>
+
+      {% if kanban_board.include_needs_testing %}
+        <div class="position-6 width-2 cell">
+          <div class="legend-description">
+            <strong>Needs testing</strong> bugs are <em>Fix Committed</em>
+            or <em>In Progress</em> with an <em>Approved</em> or
+            <em>Merged</em> merge proposal.
+          </div>
+        </div>
+
+        <div class="position-8 width-2 cell">
+          <div class="legend-description">
+            <strong>Needs release</strong> bugs are <em>Fix
+            Committed</em> and have the <code>verified</code> tag.
+          </div>
+        </div>
+
+        <div class="position-10 width-2 cell">
+          <div class="legend-description">
+            <strong>Fix released</strong> bugs are <em>Fix Released</em>.
+          </div>
+        </div>
+      {% else %}
+        <div class="position-6 width-2 cell">
+          <div class="legend-description">
+            <strong>Needs release</strong> bugs are <em>Fix
+            Committed</em> or <em>In Progress</em> with
+            an <em>Approved</em> or
+            <em>Merged</em> merge proposal.
+          </div>
+        </div>
+
+        <div class="position-8 width-2 cell">
+          <div class="legend-description">
+            <strong>Fix released</strong> bugs are <em>Fix Released</em>.
+          </div>
+        </div>
+      {% endif %}
+      </div>
+
+      <!-- XXX This is a hack.  It'd be better to add bottom-rounded
+               borders to the last .tile element. -->
+      <div id="prefooter" class="row">
+      {% if kanban_board.include_needs_testing %}
+        <div class="position-0 width-12 cell">&nbsp;</div>
+      {% else %}
+        <div class="position-0 width-10 cell">&nbsp;</div>
+      {% endif %}
+      </div>
+
+      <div id="footer" class="row">
+      {% if kanban_board.include_needs_testing %}
+        <div class="position-0 width-12 cell">Generated on {{ now }}.</div>
+      {% else %}
+        <div class="position-0 width-10 cell">Generated on {{ now }}.</div>
+      {% endif %}
+      </div>
+
+    </div>
+  </body>
+</html>
