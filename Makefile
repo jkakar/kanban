@@ -1,3 +1,6 @@
+build:
+	pip install -r requirements.txt
+
 clean:
 	find . -name \*pyc -exec rm {} \;
 
@@ -5,10 +8,7 @@ check:
 	@trial kanban
 
 info:
-	@bzr info
-	@echo
-	@echo "Revision:"
-	@bzr revno
+	@git status
 	@echo
 	@echo "Lines of application code:"
 	@find kanban -name \*py | grep -v test_ | xargs cat | wc -l

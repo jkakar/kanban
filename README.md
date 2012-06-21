@@ -26,13 +26,14 @@ version 3 License is in `/usr/share/common-licenses/GPL-3`.
 Dependencies
 ------------
 
-Kanban requires Python 2.6+ and has the following package
+Kanban requires Python 2.6+ and has the following Ubuntu package
 dependencies:
 
 - `python-commandant`
 - `python-jinja2`
 - `python-launchpadlib`
 - `python-testtools` (to run the test suite)
+- `python-twisted` (to run the test suite)
 
 The `python-commandant` package is available from a PPA:
 
@@ -45,3 +46,18 @@ Using Kanban
 Run the following command to learn how to use Kanban in more detail:
 
     bin/kanban help tutorial | less
+
+
+Developing Kanban
+-----------------
+
+Development can be done by installing the packages above but it's
+probably easier to use PIP in a virtualenv.  You need to install
+`virtualenvwrapper` and `virtualenv` and then run the following
+commands:
+
+    mkvirtualenv kanban
+    make build check
+
+At this point all the tests should have run and passed and you should
+be ready to hack on the code.
