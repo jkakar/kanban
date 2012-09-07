@@ -3,3 +3,4 @@ commandant == 0.4.0
 Jinja2 == 2.6
 testtools == 0.9.15
 Twisted == 12.1.0
+launchpadlib
